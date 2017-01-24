@@ -1,0 +1,49 @@
+entity.svg_icon.canonical:
+  path: '/admin/config/user-interface/svg-icon/{svg_icon}'
+  defaults:
+    _entity_form: 'svg_icon.edit'
+    _title: 'Edit configuration'
+  options:
+    _admin_route: TRUE
+  requirements:
+    _permission: 'administer site configuration'
+
+entity.svg_icon.add_form:
+  path: '/admin/config/user-interface/svg-icon/add'
+  defaults:
+    _entity_form: 'svg_icon.add'
+    _title: 'Add configuration'
+  options:
+    _admin_route: TRUE
+  requirements:
+    _permission: 'administer site configuration'
+
+entity.svg_icon.edit_form:
+  path: '/admin/config/user-interface/svg-icon/{svg_icon}/edit'
+  defaults:
+    _entity_form: 'svg_icon.edit'
+    _title: 'Edit configuration'
+  options:
+    _admin_route: TRUE
+  requirements:
+    _permission: 'administer site configuration'
+
+entity.svg_icon.delete_form:
+  path: '/admin/config/user-interface/svg-icon/{svg_icon}/delete'
+  defaults:
+    _entity_form: 'svg_icon.delete'
+    _title: 'Delete configuration'
+  options:
+    _admin_route: TRUE
+  requirements:
+    _permission: 'administer site configuration'
+
+entity.svg_icon.collection:
+  path: '/admin/config/user-interface/svg-icon'
+  defaults:
+    _entity_list: 'svg_icon'
+    _title: 'SVG icons'
+  options:
+    _admin_route: TRUE
+  requirements:
+    _permission: 'administer site configuration'
