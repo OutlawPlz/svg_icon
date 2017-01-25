@@ -1,0 +1,127 @@
+<?php
+/**
+* @file
+* A description of what your module does.
+*/
+
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\file\Entity\File;
+use Drupal\menu_link_content\Plugin\Menu\MenuLinkContent;
+use Drupal\svg_icon\Entity\SvgIcon;
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function svg_icon_menu_link_form_menu_link_content_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+
+  $form['svg_icon'] = array(
+    '#type' => 'details',
+    '#title' => t('Icon'),
+  );
+
+  $form['svg']['#group'] = 'svg_icon';
+  $form['icon_attribute']['#group'] = 'svg_icon';
+  $form['icon_only']['#group'] = 'svg_icon';
+}
+
+/**
+ * Implements hook_entity_base_field_info().
+ */
+function svg_icon_menu_link_entity_base_field_info(EntityTypeInterface $entity_type) {
+
+  $fields = array();
+
+  if ( $entity_type->get('id') !== 'menu_link_content' ) {
+    return $fields;
+  }
+
+  $entities = SvgIcon::loadMultiple();
+  $config_list = array();
+
+  /** @var Drupal\droppy\Entity\Droppy $entity */
+  foreach ($entities as $entity) {
+    $config_list[$entity->get('id')] = $entity->get('label');
+  }
+
+  $fields['svg'] = BaseFieldDefinition::create('list_string')
+    ->setLabel('SVG sprite')
+    ->setDescription('Select the SVG sprite file.')
+    ->setSettings(array(
+      'allowed_values' => $config_list
+    ))
+    ->setDisplayOptions('form', array(
+      'type' => 'select',
+      'settings' => array(
+        'display_label' => TRUE
+      )
+    ));
+
+  $fields['icon_attribute'] = BaseFieldDefinition::create('string')
+    ->setLabel(t('Icon attribute'))
+    ->setDescription(t('Add the attributes to print your icon.'))
+    ->setDisplayOptions('form', array(
+      'type' => 'textfield',
+      'settings' => array(
+        'display_label' => TRUE
+      )
+    ));
+
+  $fields['icon_only'] = BaseFieldDefinition::create('boolean')
+    ->setLabel(t('Icon only'))
+    ->setDescription(t('Display the icon and hide link text.'))
+    ->setDisplayOptions('form', array(
+      'type' => 'checkbox',
+    ));
+
+  return $fields;
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function svg_icon_menu_link_preprocess_menu(&$variables) {
+
+  foreach ($variables['items'] as $key => $item) {
+
+    /** @var \Drupal\menu_link_content\Plugin\Menu\MenuLinkContent $plugin */
+    $plugin = $item['original_link'];
+
+    if ($plugin instanceof MenuLinkContent) {
+
+      list($entity_type, $uuid) = explode(':', $plugin->getPluginId(), 2);
+
+      /** @var \Drupal\menu_link_content\Entity\MenuLinkContent $menu_link_content */
+      $menu_link_content = \Drupal::entityManager()->loadEntityByUuid($entity_type, $uuid);
+      /** @var \Drupal\svg_icon\Entity\SvgIconInterface $svg_icon */
+      $svg_icon = SvgIcon::load($menu_link_content->get('svg')->value);
+
+      if (!$svg_icon) {
+        continue;
+      }
+
+      $svg = $svg_icon->get('svg');
+      /** @var \Drupal\file\FileInterface $file */
+      $file = File::load($svg[0]);
+
+      $url = file_url_transform_relative($file->url());
+      $icon_only = $menu_link_content->get('icon_only')->value;
+      $icon_attribute = $menu_link_content->get('icon_attribute')->value;
+      $title = $item['title'];
+
+      if ($icon_attribute) {
+        $url .= '#' . $icon_attribute;
+        $icon = "<svg class=\"svg-icon svg-icon--$icon_attribute\"><use xlink:href=\"$url\" /></svg>";
+
+        if ($icon_only) {
+          $title = "<span class=\"visually-hidden\">$title</span>";
+        }
+
+        $title = t($icon . $title);
+      }
+
+      $variables['items'][$key]['title'] = $title;
+    }
+  }
+}

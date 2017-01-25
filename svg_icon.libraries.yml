@@ -1,0 +1,7 @@
+svg_icon:
+    version: VERSION
+    css:
+      component:
+        styles/css/component/svg-icon.css: {}
+    js:
+      js/svgxuse.min.js: { minified: true }

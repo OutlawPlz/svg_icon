@@ -2,3 +2,4 @@ name: SVG icon
 type: module
 description: 'Manage your SVG icon set.'
 core: 8.x
+package: 'SVG Icon'

@@ -11,6 +11,7 @@ use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\file\Entity\File;
+use Drupal\file\FileInterface;
 
 /**
  * Form handler for the SvgIcon configuration add and edit forms.
@@ -84,15 +85,10 @@ class SvgIconForm extends EntityForm {
     /** @var \Drupal\svg_icon\Entity\SvgIconInterface $entity */
     $entity = $this->entity;
     $svg = $form_state->getValue('svg');
-    /** @var \Drupal\file\FileUsage\FileUsageInterface $file_usage */
-    $file_usage = \Drupal::service('file.usage');
+
+    $this->saveFile(File::load($svg[0]));
 
     $status = parent::save($form, $form_state);
-
-    $file = File::load($svg[0]);
-    $file_usage->add($file, 'svg_icon', $entity->getEntityTypeId(), $entity->id());
-    $file->setPermanent();
-    $file->save();
 
     $replacement = array(
       '%label' => $entity->get('label')
@@ -108,5 +104,37 @@ class SvgIconForm extends EntityForm {
     $form_state->setRedirect('entity.svg_icon.collection');
 
     return $status;
+  }
+
+  /**
+   * Set file status to permanent and register the file_usage entry.
+   *
+   * @param \Drupal\file\FileInterface $file
+   */
+  protected function saveFile(FileInterface $file) {
+
+    /** @var \Drupal\file\FileUsage\FileUsageInterface $file_usage */
+    $file_usage = \Drupal::service('file.usage');
+    $entity = $this->entity;
+
+    $file_usage->add($file, 'svg_icon', $entity->getEntityTypeId(), $entity->id());
+    $file->setPermanent();
+    $file->save();
+  }
+
+  /**
+   * Set the file status to temporary and remove the file_usage entry.
+   *
+   * @param \Drupal\file\FileInterface $file
+   */
+  protected function deleteFile(FileInterface $file) {
+
+    /** @var \Drupal\file\FileUsage\FileUsageInterface $file_usage */
+    $file_usage = \Drupal::service('file.usage');
+    $entity = $this->entity;
+
+    $file_usage->delete($file, 'svg_icon', $entity->getEntityTypeId(), $entity->id());
+    $file->setTemporary();
+    $file->save();
   }
 }

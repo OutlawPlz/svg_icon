@@ -24,6 +24,7 @@ class SvgIconDeleteForm extends EntityDeleteForm {
     /** @var \Drupal\file\FileUsage\FileUsageInterface $file_usage */
     $file_usage = \Drupal::service('file.usage');
 
+    /** @var \Drupal\file\FileInterface $file */
     $file = File::load($svg[0]);
     $file_usage->delete($file, 'svg_icon', $entity->getEntityTypeId(), $entity->id());
     $file->setTemporary();
