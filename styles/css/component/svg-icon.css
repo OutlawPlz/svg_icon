@@ -3,8 +3,19 @@
     width: 1em;
     height: 1em;
     fill: currentColor;
-    margin-right: .5em;
     vertical-align: middle;
     position: relative;
     top: -1px;
+}
+
+.svg-icon--right {
+    margin-left: .5em;
+}
+
+.svg-icon--left {
+    margin-right: .5em;
+}
+
+.svg-icon--only {
+
 }

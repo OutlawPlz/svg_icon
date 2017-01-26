@@ -123,18 +123,25 @@ class SvgIconForm extends EntityForm {
   }
 
   /**
-   * Set the file status to temporary and remove the file_usage entry.
+   * Remove the file_usage entry and if there are no other usage, set file
+   * status to temporary.
    *
    * @param \Drupal\file\FileInterface $file
    */
-  protected function deleteFile(FileInterface $file) {
+  public function deleteFile(FileInterface $file) {
 
     /** @var \Drupal\file\FileUsage\FileUsageInterface $file_usage */
     $file_usage = \Drupal::service('file.usage');
+    /** @var \Drupal\svg_icon\Entity\SvgIconInterface $entity */
     $entity = $this->entity;
 
     $file_usage->delete($file, 'svg_icon', $entity->getEntityTypeId(), $entity->id());
-    $file->setTemporary();
+    $usage_list_count = count($file_usage->listUsage($file));
+
+    if (!$usage_list_count) {
+      $file->setTemporary();
+    }
+
     $file->save();
   }
 }

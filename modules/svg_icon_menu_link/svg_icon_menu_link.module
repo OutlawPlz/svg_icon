@@ -19,11 +19,13 @@ function svg_icon_menu_link_form_menu_link_content_form_alter(&$form, FormStateI
   $form['svg_icon'] = array(
     '#type' => 'details',
     '#title' => t('Icon'),
+    '#open' => TRUE
   );
 
   $form['svg']['#group'] = 'svg_icon';
-  $form['icon_attribute']['#group'] = 'svg_icon';
+  $form['icon_id']['#group'] = 'svg_icon';
   $form['icon_only']['#group'] = 'svg_icon';
+  $form['icon_right']['#group'] = 'svg_icon';
 }
 
 /**
@@ -58,7 +60,7 @@ function svg_icon_menu_link_entity_base_field_info(EntityTypeInterface $entity_t
       )
     ));
 
-  $fields['icon_attribute'] = BaseFieldDefinition::create('string')
+  $fields['icon_id'] = BaseFieldDefinition::create('string')
     ->setLabel(t('Icon attribute'))
     ->setDescription(t('Add the attributes to print your icon.'))
     ->setDisplayOptions('form', array(
@@ -66,6 +68,13 @@ function svg_icon_menu_link_entity_base_field_info(EntityTypeInterface $entity_t
       'settings' => array(
         'display_label' => TRUE
       )
+    ));
+
+  $fields['icon_right'] = BaseFieldDefinition::create('boolean')
+    ->setLabel(t('Print right'))
+    ->setDescription(t('Prints the icon on the right.'))
+    ->setDisplayOptions('form', array(
+      'type' => 'checkbox'
     ));
 
   $fields['icon_only'] = BaseFieldDefinition::create('boolean')
@@ -107,18 +116,24 @@ function svg_icon_menu_link_preprocess_menu(&$variables) {
 
       $url = file_url_transform_relative($file->url());
       $icon_only = $menu_link_content->get('icon_only')->value;
-      $icon_attribute = $menu_link_content->get('icon_attribute')->value;
+      $icon_id = $menu_link_content->get('icon_id')->value;
+      $icon_right = $menu_link_content->get('icon_right')->value;
+      $icon_attribute = 'svg-icon';
       $title = $item['title'];
 
-      if ($icon_attribute) {
-        $url .= '#' . $icon_attribute;
-        $icon = "<svg class=\"svg-icon svg-icon--$icon_attribute\"><use xlink:href=\"$url\" /></svg>";
+      if ($icon_id) {
+        $url .= '#' . $icon_id;
+        $icon_attribute .= " svg-icon--$icon_id";
 
         if ($icon_only) {
           $title = "<span class=\"visually-hidden\">$title</span>";
         }
+        else {
+          $icon_right ? $icon_attribute .= " svg-icon--right" : $icon_attribute .= " svg-icon--left";
+        }
 
-        $title = t($icon . $title);
+        $icon = "<svg class=\"$icon_attribute\"><use xlink:href=\"$url\" /></svg>";
+        $icon_right ? $title = t($title . $icon) : $title = t($icon . $title);
       }
 
       $variables['items'][$key]['title'] = $title;

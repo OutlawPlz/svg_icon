@@ -7,14 +7,6 @@
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Implements hook_form_alter().
- */
-function svg_icon_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-
-  // kint($form_id);
-}
-
-/**
  * Implements hook_page_attachments().
  */
 function svg_icon_page_attachments(array &$attachments) {
