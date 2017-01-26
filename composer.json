@@ -1,0 +1,14 @@
+{
+    "name": "outlawplz/svg_icon",
+    "description": "Drupal 8 config entity representing an SVG sprite.",
+    "type": "drupal-module",
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "Matteo Palazzo",
+            "email": "outlaw.plz@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
