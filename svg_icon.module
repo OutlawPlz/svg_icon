@@ -3,13 +3,3 @@
 * @file
 * A description of what your module does.
 */
-
-use Drupal\Core\Form\FormStateInterface;
-
-/**
- * Implements hook_page_attachments().
- */
-function svg_icon_page_attachments(array &$attachments) {
-
-  $attachments['#attached']['library'][] = 'svg_icon/svg_icon';
-}
