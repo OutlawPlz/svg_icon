@@ -8,6 +8,7 @@ namespace Drupal\svg_icon\Entity;
 
 
 use Drupal\Core\Config\Entity\ConfigEntityBase;
+use Drupal\file\Entity\File;
 
 /**
  * Defines the SvgIcon configuration entity.
@@ -54,16 +55,41 @@ class SvgIcon extends ConfigEntityBase implements SvgIconInterface {
   protected $label;
 
   /**
-   * @var
+   * The ID of the loaded file.
+   * @var array
    */
-  protected $svg;
+  protected $svg_sprite;
 
   /**
-   * Return the SVG.
-   * @return mixed
+   * Gets the SVG sprite file.
+   *
+   * @return \Drupal\file\FileInterface
+   *   The SVG sprite file.
    */
-  public function getSvg() {
+  public function getSvgSprite() {
 
-    return $this->svg;
+    $svg_sprite = $this->svg_sprite;
+
+    return File::load($svg_sprite[0]);
+  }
+
+  /**
+   * Gets the configuration list.
+   *
+   * @return array
+   *   An array of Droppy configuration. The config ID is the key, and the
+   *   config label the value.
+   */
+  public static function getConfigList() {
+
+    $entities = SvgIcon::loadMultiple();
+    $config_list = array();
+
+    /** @var SvgIconInterface $entity */
+    foreach ($entities as $entity) {
+      $config_list[$entity->get('id')] = $entity->get('label');
+    }
+
+    return $config_list;
   }
 }

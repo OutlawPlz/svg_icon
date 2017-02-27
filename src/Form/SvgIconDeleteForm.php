@@ -21,9 +21,9 @@ class SvgIconDeleteForm extends EntityDeleteForm {
 
     /** @var \Drupal\svg_icon\Entity\SvgIconInterface $entity */
     $entity = $this->entity;
-    $svg = $entity->getSvg();
+    $file = $entity->getSvgSprite();
 
-    $this->deleteFile(File::load($svg[0]));
+    $this->deleteFile($file);
 
     parent::submitForm($form, $form_state);
   }

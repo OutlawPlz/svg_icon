@@ -11,9 +11,9 @@ svg_icon.svg_icon.*:
     uuid:
       type: string
       label: 'UUID'
-    svg:
+    svg_sprite:
       type: mapping
-      label: 'SVG'
+      label: 'SVG Sprite'
       mapping:
         fid:
           type: string

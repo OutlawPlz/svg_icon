@@ -1,0 +1,23 @@
+{#
+/**
+ * @file
+ * Default theme implementation for svg_icon.
+ *
+ * Available variables:
+ *   - element.icon: The icon.
+ *   - element.label: The icon label.
+ *   - icon_right: A boolean value indicating the position of the icon.
+ *   - hide_label: A boolean value indicating the visibility of the label.
+ */
+#}
+{%
+  set classes = [
+    'svg-icon__label',
+    hide_label ? 'visually-hidden'
+  ]
+%}
+{% if icon_right %}
+  <span{{ attributes.addClass(classes) }}>{{ element.label }}</span>{{ element.icon }}
+{% else %}
+  {{ element.icon }}<span{{ attributes.addClass(classes) }}>{{ element.label }}</span>
+{% endif %}

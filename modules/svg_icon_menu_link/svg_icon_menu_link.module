@@ -7,8 +7,6 @@
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Template\Attribute;
-use Drupal\file\Entity\File;
 use Drupal\menu_link_content\Plugin\Menu\MenuLinkContent;
 use Drupal\svg_icon\Entity\SvgIcon;
 
@@ -40,22 +38,15 @@ function svg_icon_menu_link_entity_base_field_info(EntityTypeInterface $entity_t
     return $fields;
   }
 
-  $entities = SvgIcon::loadMultiple();
-  $config_list = array();
-
-  /** @var Drupal\droppy\Entity\Droppy $entity */
-  foreach ($entities as $entity) {
-    $config_list[$entity->get('id')] = $entity->get('label');
-  }
-
   $fields['svg'] = BaseFieldDefinition::create('list_string')
     ->setLabel('SVG sprite')
     ->setDescription('Select the SVG sprite file.')
     ->setSettings(array(
-      'allowed_values' => $config_list
+      'allowed_values' => SvgIcon::getConfigList()
     ))
     ->setDisplayOptions('form', array(
       'type' => 'select',
+      'weight' => 0,
       'settings' => array(
         'display_label' => TRUE
       )
@@ -66,6 +57,7 @@ function svg_icon_menu_link_entity_base_field_info(EntityTypeInterface $entity_t
     ->setDescription(t('Add the attributes to print your icon.'))
     ->setDisplayOptions('form', array(
       'type' => 'textfield',
+      'weight' => 0,
       'settings' => array(
         'display_label' => TRUE
       )
@@ -75,7 +67,8 @@ function svg_icon_menu_link_entity_base_field_info(EntityTypeInterface $entity_t
     ->setLabel(t('Print right'))
     ->setDescription(t('Prints the icon on the right.'))
     ->setDisplayOptions('form', array(
-      'type' => 'checkbox'
+      'type' => 'checkbox',
+      'weight' => 0,
     ));
 
   $fields['icon_only'] = BaseFieldDefinition::create('boolean')
@@ -83,6 +76,7 @@ function svg_icon_menu_link_entity_base_field_info(EntityTypeInterface $entity_t
     ->setDescription(t('Display the icon and hide link text.'))
     ->setDisplayOptions('form', array(
       'type' => 'checkbox',
+      'weight' => 0
     ));
 
   return $fields;
@@ -104,58 +98,25 @@ function svg_icon_menu_link_preprocess_menu(&$variables) {
 
       /** @var \Drupal\menu_link_content\Entity\MenuLinkContent $menu_link_content */
       $menu_link_content = \Drupal::entityManager()->loadEntityByUuid($entity_type, $uuid);
-      $svg = $menu_link_content->get('svg')->value;
+      $config = $menu_link_content->get('svg')->value;
 
-      if (!$svg) {
+      if (!$config) {
         continue;
       }
 
       /** @var \Drupal\svg_icon\Entity\SvgIconInterface $svg_icon */
-      $svg_icon = SvgIcon::load($svg);
-
-      $svg = $svg_icon->get('svg');
-      /** @var \Drupal\file\FileInterface $file */
-      $file = File::load($svg[0]);
+      $svg_icon = SvgIcon::load($config);
+      /** @var \Drupal\file\FileInterface $svg_sprite */
+      $svg_sprite = $svg_icon->getSvgSprite();
 
       $variables['items'][$key]['title'] = array(
-        '#type' => 'svg_icon_menu_link',
+        '#type' => 'svg_icon_text',
         '#label' => $item['title'],
-        '#svg' => file_url_transform_relative($file->url()),
-        '#id' => $menu_link_content->get('icon_id')->value,
-        '#right' => $menu_link_content->get('icon_right')->value,
-        '#only' => $menu_link_content->get('icon_only')->value
+        '#svg_sprite' => $svg_sprite,
+        '#icon_id' => $menu_link_content->get('icon_id')->value,
+        '#icon_right' => $menu_link_content->get('icon_right')->value,
+        '#hide_label' => $menu_link_content->get('icon_only')->value
       );
     }
   }
-}
-
-/**
- * Implements hook_preprocess_HOOK().
- */
-function svg_icon_menu_link_preprocess_svg_icon_menu_link(&$variables) {
-
-  $icon = $variables['icon'];
-  $classes = array();
-
-  if ($icon['#only']) {
-    $classes[] = 'visually-hidden';
-  }
-
-  $variables['label_attributes'] = new Attribute(array(
-    'class' => $classes
-  ));
-}
-
-/**
- * Implements hook_theme().
- */
-function svg_icon_menu_link_theme($existing, $type, $theme, $path) {
-
-  $items = array(
-    'svg_icon_menu_link' => array(
-      'render element' => 'icon'
-    )
-  );
-
-  return $items;
 }

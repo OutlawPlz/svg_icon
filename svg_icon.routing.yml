@@ -42,7 +42,7 @@ entity.svg_icon.collection:
   path: '/admin/config/user-interface/svg-icon'
   defaults:
     _entity_list: 'svg_icon'
-    _title: 'SVG icons'
+    _title: 'SVG Icons'
   options:
     _admin_route: TRUE
   requirements:

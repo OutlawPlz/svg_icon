@@ -55,7 +55,7 @@ class SvgIconForm extends EntityForm {
       '#description' => $this->t('')
     );
 
-    $form['svg'] = array(
+    $form['svg_sprite'] = array(
       '#type' => 'managed_file',
       '#title' => 'SVG sprite',
       '#description' => 'Upload an SVG sprite file.',
@@ -63,7 +63,7 @@ class SvgIconForm extends EntityForm {
       '#upload_validators' => array(
         'file_validate_extensions' => array('svg')
       ),
-      '#default_value' => $entity->get('svg'),
+      '#default_value' => $entity->get('svg_sprite'),
       '#required' => TRUE
     );
 
@@ -84,9 +84,9 @@ class SvgIconForm extends EntityForm {
 
     /** @var \Drupal\svg_icon\Entity\SvgIconInterface $entity */
     $entity = $this->entity;
-    $svg = $form_state->getValue('svg');
+    $svg_sprite = $form_state->getValue('svg_sprite');
 
-    $this->saveFile(File::load($svg[0]));
+    $this->saveFile(File::load($svg_sprite[0]));
 
     $status = parent::save($form, $form_state);
 
@@ -95,10 +95,10 @@ class SvgIconForm extends EntityForm {
     );
 
     if ($status === SAVED_NEW) {
-      drupal_set_message($this->t('Configuration <em>%label</em> has been created'), $replacement);
+      drupal_set_message($this->t('Configuration <em>%label</em> has been created', $replacement));
     }
     elseif ($status === SAVED_UPDATED) {
-      drupal_set_message($this->t('Configuration <em>%label</em> has been updated.'), $replacement);
+      drupal_set_message($this->t('Configuration <em>%label</em> has been updated.', $replacement));
     }
 
     $form_state->setRedirect('entity.svg_icon.collection');

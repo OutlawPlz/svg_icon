@@ -1,0 +1,19 @@
+{#
+/**
+ * @file
+ * Default theme implementation for svg_icon.
+ *
+ * Available variables:
+ *   - element.svg_sprite: The url of the SVG sprite file.
+ *   - element.icon_id: The ID of the icon to display.
+ */
+#}
+{%
+  set classes = [
+    'svg-icon',
+    'svg-icon--' ~ icon_id|clean_class
+  ]
+%}
+<svg{{ attributes.addClass(classes) }}>
+  <use xlink:href="{{ element.svg_sprite }}#{{ element.icon_id }}" />
+</svg>

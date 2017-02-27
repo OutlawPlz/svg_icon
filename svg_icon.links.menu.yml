@@ -1,5 +1,5 @@
 svg_icon.admin_config_ui.collection:
-  title: SVG icon
+  title: SVG Icon
   route_name: entity.svg_icon.collection
   description: 'Add and modify SVG icon set.'
   parent: system.admin_config_ui
