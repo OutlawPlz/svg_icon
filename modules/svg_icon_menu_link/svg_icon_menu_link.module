@@ -5,7 +5,9 @@
 */
 
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\menu_link_content\Plugin\Menu\MenuLinkContent;
 use Drupal\svg_icon\Entity\SvgIcon;
@@ -42,7 +44,7 @@ function svg_icon_menu_link_entity_base_field_info(EntityTypeInterface $entity_t
     ->setLabel('SVG sprite')
     ->setDescription('Select the SVG sprite file.')
     ->setSettings(array(
-      'allowed_values' => SvgIcon::getConfigList()
+      'allowed_values_function' => 'svg_icon_allowed_values_callback'
     ))
     ->setDisplayOptions('form', array(
       'type' => 'select',
@@ -92,31 +94,42 @@ function svg_icon_menu_link_preprocess_menu(&$variables) {
     /** @var \Drupal\menu_link_content\Plugin\Menu\MenuLinkContent $plugin */
     $plugin = $item['original_link'];
 
-    if ($plugin instanceof MenuLinkContent) {
-
-      list($entity_type, $uuid) = explode(':', $plugin->getPluginId(), 2);
-
-      /** @var \Drupal\menu_link_content\Entity\MenuLinkContent $menu_link_content */
-      $menu_link_content = \Drupal::entityManager()->loadEntityByUuid($entity_type, $uuid);
-      $config = $menu_link_content->get('svg')->value;
-
-      if (!$config) {
-        continue;
-      }
-
-      /** @var \Drupal\svg_icon\Entity\SvgIconInterface $svg_icon */
-      $svg_icon = SvgIcon::load($config);
-      /** @var \Drupal\file\FileInterface $svg_sprite */
-      $svg_sprite = $svg_icon->getSvgSprite();
-
-      $variables['items'][$key]['title'] = array(
-        '#type' => 'svg_icon_text',
-        '#label' => $item['title'],
-        '#svg_sprite' => $svg_sprite,
-        '#icon_id' => $menu_link_content->get('icon_id')->value,
-        '#icon_right' => $menu_link_content->get('icon_right')->value,
-        '#hide_label' => $menu_link_content->get('icon_only')->value
-      );
+    // If the plugin is not instance of MenuLinkContent, continue.
+    if (!$plugin instanceof MenuLinkContent) {
+      continue;
     }
+
+    list($entity_type, $uuid) = explode(':', $plugin->getPluginId(), 2);
+
+    /** @var \Drupal\menu_link_content\Entity\MenuLinkContent $menu_link_content */
+    $menu_link_content = \Drupal::entityManager()->loadEntityByUuid($entity_type, $uuid);
+    $config = $menu_link_content->get('svg')->value;
+
+    // If no SVG sprite is selected, continue.
+    if (!$config) {
+      continue;
+    }
+
+    /** @var \Drupal\svg_icon\Entity\SvgIconInterface $svg_icon */
+    $svg_icon = SvgIcon::load($config);
+    /** @var \Drupal\file\FileInterface $svg_sprite */
+    $svg_sprite = $svg_icon->getSvgSprite();
+
+    $variables['items'][$key]['title'] = array(
+      '#type' => 'svg_icon_text',
+      '#label' => $item['title'],
+      '#svg_sprite' => $svg_sprite,
+      '#icon_id' => $menu_link_content->get('icon_id')->value,
+      '#icon_right' => $menu_link_content->get('icon_right')->value,
+      '#hide_label' => $menu_link_content->get('icon_only')->value
+    );
   }
+}
+
+/**
+ * Implements callback_allowed_values_function().
+ */
+function svg_icon_allowed_values_callback(FieldStorageDefinitionInterface $definition, FieldableEntityInterface $entity = NULL, &$cacheable = NULL) {
+
+  return SvgIcon::getConfigList();
 }
