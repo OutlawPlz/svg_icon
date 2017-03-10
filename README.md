@@ -1,12 +1,12 @@
-# SVG Icon
+# SVG Sprite
 
 Custom config entity representing an SVG sprite.
 
 ## Quick Start
 
-Start usign SVG Icon in three steps.
+Start usign SVG Sprite in three steps.
 
-1. Download latest SVG Icon module from [Github][007e628a] or via Composer and
+1. Download latest SVG Sprite module from [Github][007e628a] or via Composer and
 enable it as usual.
   ```sh
   composer require outlawplz/svg_icon
@@ -17,9 +17,9 @@ enable it as usual.
 
 3. In **Configuration > SVG Icon** upload your SVG sprite.
 
-That's it. You're all set to start using SVG Icon.
+That's it. You're all set to start using SVG Sprite.
 
-  [007e628a]: https://github.com/OutlawPlz/svg_icon "Github - SVG Icon"
+  [007e628a]: https://github.com/OutlawPlz/svg_sprite "Github - SVG Sprite"
   [ab7bbc6f]: https://icomoon.io/ "Icomoon"
   [53702462]: http://www.flaticon.com/ "Flaticon"
 

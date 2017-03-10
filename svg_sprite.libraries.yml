@@ -1,4 +1,4 @@
-svg_icon:
+svg_sprite:
     version: VERSION
     css:
       component:

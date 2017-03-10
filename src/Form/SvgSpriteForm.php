@@ -1,10 +1,10 @@
 <?php
 /**
  * @files
- * Contains \Drupal\svg_icon\Form\SvgIconForm
+ * Contains \Drupal\svg_sprite\Form\SvgIconForm
  */
 
-namespace Drupal\svg_icon\Form;
+namespace Drupal\svg_sprite\Form;
 
 
 use Drupal\Core\Entity\EntityForm;
@@ -14,9 +14,9 @@ use Drupal\file\Entity\File;
 use Drupal\file\FileInterface;
 
 /**
- * Form handler for the SvgIcon configuration add and edit forms.
+ * Form handler for the SvgSprite configuration add and edit forms.
  */
-class SvgIconForm extends EntityForm {
+class SvgSpriteForm extends EntityForm {
 
   /**
    * Gets the actual form array to be built.
@@ -30,7 +30,7 @@ class SvgIconForm extends EntityForm {
    */
   public function form(array $form, FormStateInterface $form_state) {
 
-    /** @var \Drupal\svg_icon\Entity\SvgIconInterface $entity */
+    /** @var \Drupal\svg_sprite\Entity\SvgSpriteInterface $entity */
     $entity = $this->entity;
     $form = parent::form($form, $form_state);
 
@@ -48,7 +48,7 @@ class SvgIconForm extends EntityForm {
       '#default_value' => $entity->get('id'),
       '#maxlength' => EntityTypeInterface::ID_MAX_LENGTH,
       '#machine_name' => array(
-        'exists' => '\Drupal\svg_icon\Entity\SvgIcon::load',
+        'exists' => '\Drupal\svg_sprite\Entity\SvgIcon::load',
         'source' => array('label')
       ),
       '#disabled' => !$entity->isNew(),
@@ -82,7 +82,7 @@ class SvgIconForm extends EntityForm {
    */
   public function save(array $form, FormStateInterface $form_state) {
 
-    /** @var \Drupal\svg_icon\Entity\SvgIconInterface $entity */
+    /** @var \Drupal\svg_sprite\Entity\SvgSpriteInterface $entity */
     $entity = $this->entity;
     $svg_sprite = $form_state->getValue('svg_sprite');
 
@@ -101,7 +101,7 @@ class SvgIconForm extends EntityForm {
       drupal_set_message($this->t('Configuration <em>%label</em> has been updated.', $replacement));
     }
 
-    $form_state->setRedirect('entity.svg_icon.collection');
+    $form_state->setRedirect('entity.svg_sprite.collection');
 
     return $status;
   }
@@ -117,7 +117,7 @@ class SvgIconForm extends EntityForm {
     $file_usage = \Drupal::service('file.usage');
     $entity = $this->entity;
 
-    $file_usage->add($file, 'svg_icon', $entity->getEntityTypeId(), $entity->id());
+    $file_usage->add($file, 'svg_sprite', $entity->getEntityTypeId(), $entity->id());
     $file->setPermanent();
     $file->save();
   }
@@ -132,10 +132,10 @@ class SvgIconForm extends EntityForm {
 
     /** @var \Drupal\file\FileUsage\FileUsageInterface $file_usage */
     $file_usage = \Drupal::service('file.usage');
-    /** @var \Drupal\svg_icon\Entity\SvgIconInterface $entity */
+    /** @var \Drupal\svg_sprite\Entity\SvgSpriteInterface $entity */
     $entity = $this->entity;
 
-    $file_usage->delete($file, 'svg_icon', $entity->getEntityTypeId(), $entity->id());
+    $file_usage->delete($file, 'svg_sprite', $entity->getEntityTypeId(), $entity->id());
     $usage_list_count = count($file_usage->listUsage($file));
 
     if (!$usage_list_count) {

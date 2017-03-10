@@ -1,16 +1,16 @@
 <?php
 /**
  * @file
- * Contains \Drupal\svg_icon\SvgIconListBuilder
+ * Contains \Drupal\svg_sprite\SvgSpriteListBuilder
  */
 
-namespace Drupal\svg_icon;
+namespace Drupal\svg_sprite;
 
 
 use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
 use Drupal\Core\Entity\EntityInterface;
 
-class SvgIconListBuilder extends ConfigEntityListBuilder {
+class SvgSpriteListBuilder extends ConfigEntityListBuilder {
 
   /**
    * Builds the header row for the entity listing.

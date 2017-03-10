@@ -10,7 +10,7 @@ use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\menu_link_content\Plugin\Menu\MenuLinkContent;
-use Drupal\svg_icon\Entity\SvgIcon;
+use Drupal\svg_sprite\Entity\SvgSprite;
 
 /**
  * Implements hook_form_BASE_FORM_ID_alter().
@@ -23,10 +23,10 @@ function svg_icon_menu_link_form_menu_link_content_form_alter(&$form, FormStateI
     '#open' => TRUE
   );
 
-  $form['svg']['#group'] = 'svg_icon';
+  $form['svg_sprite']['#group'] = 'svg_icon';
   $form['icon_id']['#group'] = 'svg_icon';
-  $form['icon_only']['#group'] = 'svg_icon';
   $form['icon_right']['#group'] = 'svg_icon';
+  $form['hide_label']['#group'] = 'svg_icon';
 }
 
 /**
@@ -40,8 +40,8 @@ function svg_icon_menu_link_entity_base_field_info(EntityTypeInterface $entity_t
     return $fields;
   }
 
-  $fields['svg'] = BaseFieldDefinition::create('list_string')
-    ->setLabel('SVG sprite')
+  $fields['svg_sprite'] = BaseFieldDefinition::create('list_string')
+    ->setLabel('SVG Sprite')
     ->setDescription('Select the SVG sprite file.')
     ->setSettings(array(
       'allowed_values_function' => 'svg_icon_allowed_values_callback'
@@ -55,8 +55,8 @@ function svg_icon_menu_link_entity_base_field_info(EntityTypeInterface $entity_t
     ));
 
   $fields['icon_id'] = BaseFieldDefinition::create('string')
-    ->setLabel(t('Icon attribute'))
-    ->setDescription(t('Add the attributes to print your icon.'))
+    ->setLabel(t('Icon ID'))
+    ->setDescription(t('Your icon ID.'))
     ->setDisplayOptions('form', array(
       'type' => 'textfield',
       'weight' => 0,
@@ -73,9 +73,9 @@ function svg_icon_menu_link_entity_base_field_info(EntityTypeInterface $entity_t
       'weight' => 0,
     ));
 
-  $fields['icon_only'] = BaseFieldDefinition::create('boolean')
-    ->setLabel(t('Icon only'))
-    ->setDescription(t('Display the icon and hide link text.'))
+  $fields['hide_label'] = BaseFieldDefinition::create('boolean')
+    ->setLabel(t('Hide label'))
+    ->setDescription(t('Display only the icon.'))
     ->setDisplayOptions('form', array(
       'type' => 'checkbox',
       'weight' => 0
@@ -103,17 +103,15 @@ function svg_icon_menu_link_preprocess_menu(&$variables) {
 
     /** @var \Drupal\menu_link_content\Entity\MenuLinkContent $menu_link_content */
     $menu_link_content = \Drupal::entityManager()->loadEntityByUuid($entity_type, $uuid);
-    $config = $menu_link_content->get('svg')->value;
+    $config = $menu_link_content->get('svg_sprite')->value;
 
     // If no SVG sprite is selected, continue.
     if (!$config) {
       continue;
     }
 
-    /** @var \Drupal\svg_icon\Entity\SvgIconInterface $svg_icon */
-    $svg_icon = SvgIcon::load($config);
     /** @var \Drupal\file\FileInterface $svg_sprite */
-    $svg_sprite = $svg_icon->getSvgSprite();
+    $svg_sprite = SvgSprite::load($config)->getSvgSprite();
 
     $variables['items'][$key]['title'] = array(
       '#type' => 'svg_icon_text',
@@ -121,7 +119,7 @@ function svg_icon_menu_link_preprocess_menu(&$variables) {
       '#svg_sprite' => $svg_sprite,
       '#icon_id' => $menu_link_content->get('icon_id')->value,
       '#icon_right' => $menu_link_content->get('icon_right')->value,
-      '#hide_label' => $menu_link_content->get('icon_only')->value
+      '#hide_label' => $menu_link_content->get('hide_label')->value
     );
   }
 }
@@ -131,5 +129,5 @@ function svg_icon_menu_link_preprocess_menu(&$variables) {
  */
 function svg_icon_allowed_values_callback(FieldStorageDefinitionInterface $definition, FieldableEntityInterface $entity = NULL, &$cacheable = NULL) {
 
-  return SvgIcon::getConfigList();
+  return SvgSprite::getConfigList();
 }

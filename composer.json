@@ -1,5 +1,5 @@
 {
-    "name": "outlawplz/svg_icon",
+    "name": "outlawplz/svg_sprite",
     "description": "Drupal 8 config entity representing an SVG sprite.",
     "type": "drupal-module",
     "license": "GPL-3.0",

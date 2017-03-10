@@ -4,7 +4,7 @@
  * Contains \Drupal\svg_icon_menu_link\Element\SvgIconMenuLink.
  */
 
-namespace Drupal\svg_icon\Element;
+namespace Drupal\svg_sprite\Element;
 
 
 use Drupal\Core\Render\Element\RenderElement;

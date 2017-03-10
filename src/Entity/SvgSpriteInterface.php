@@ -4,7 +4,7 @@
  * Contains \Drupal\scg_icon\Entity\SvgIconInterface
  */
 
-namespace Drupal\svg_icon\Entity;
+namespace Drupal\svg_sprite\Entity;
 
 use Drupal\Core\Config\Entity\ConfigEntityInterface;
 
@@ -12,7 +12,7 @@ use Drupal\Core\Config\Entity\ConfigEntityInterface;
  * Provides an interface defining a SvgIcon configuration entity.
  * @package Drupal\droppy\Entity
  */
-interface SvgIconInterface extends ConfigEntityInterface {
+interface SvgSpriteInterface extends ConfigEntityInterface {
 
 
   /**

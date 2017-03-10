@@ -1,5 +1,0 @@
-entity.svg_icon.add_form:
-  route_name: 'entity.svg_icon.add_form'
-  title: 'Add configuration'
-  appears_on:
-    - entity.svg_icon.collection

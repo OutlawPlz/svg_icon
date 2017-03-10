@@ -4,7 +4,7 @@
  * Contains \Drupal\svg_icon\Element\SvgIcon.
  */
 
-namespace Drupal\svg_icon\Element;
+namespace Drupal\svg_sprite\Element;
 
 
 use Drupal\Core\Render\Element\RenderElement;
@@ -57,7 +57,7 @@ class SvgIcon extends RenderElement {
 
     $element['#attached'] = array(
       'library' => array(
-        'svg_icon/svg_icon'
+        'svg_sprite/svg_sprite'
       )
     );
 

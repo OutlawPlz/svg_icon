@@ -1,6 +1,6 @@
 {
-  "name": "svg_icon",
-  "version": "1.0.0",
+  "name": "svg_sprite",
+  "version": "0.1.0",
   "description": "Use an SVG sprite to print icons in Drupal.",
   "main": "gulpfile.js",
   "scripts": {

@@ -1,47 +1,47 @@
-entity.svg_icon.canonical:
-  path: '/admin/config/user-interface/svg-icon/{svg_icon}'
+entity.svg_sprite.canonical:
+  path: '/admin/config/user-interface/svg-icon/{svg_sprite}'
   defaults:
-    _entity_form: 'svg_icon.edit'
+    _entity_form: 'svg_sprite.edit'
     _title: 'Edit configuration'
   options:
     _admin_route: TRUE
   requirements:
     _permission: 'administer site configuration'
 
-entity.svg_icon.add_form:
+entity.svg_sprite.add_form:
   path: '/admin/config/user-interface/svg-icon/add'
   defaults:
-    _entity_form: 'svg_icon.add'
+    _entity_form: 'svg_sprite.add'
     _title: 'Add configuration'
   options:
     _admin_route: TRUE
   requirements:
     _permission: 'administer site configuration'
 
-entity.svg_icon.edit_form:
-  path: '/admin/config/user-interface/svg-icon/{svg_icon}/edit'
+entity.svg_sprite.edit_form:
+  path: '/admin/config/user-interface/svg-icon/{svg_sprite}/edit'
   defaults:
-    _entity_form: 'svg_icon.edit'
+    _entity_form: 'svg_sprite.edit'
     _title: 'Edit configuration'
   options:
     _admin_route: TRUE
   requirements:
     _permission: 'administer site configuration'
 
-entity.svg_icon.delete_form:
-  path: '/admin/config/user-interface/svg-icon/{svg_icon}/delete'
+entity.svg_sprite.delete_form:
+  path: '/admin/config/user-interface/svg-icon/{svg_sprite}/delete'
   defaults:
-    _entity_form: 'svg_icon.delete'
+    _entity_form: 'svg_sprite.delete'
     _title: 'Delete configuration'
   options:
     _admin_route: TRUE
   requirements:
     _permission: 'administer site configuration'
 
-entity.svg_icon.collection:
+entity.svg_sprite.collection:
   path: '/admin/config/user-interface/svg-icon'
   defaults:
-    _entity_list: 'svg_icon'
+    _entity_list: 'svg_sprite'
     _title: 'SVG Icons'
   options:
     _admin_route: TRUE

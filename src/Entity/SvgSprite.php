@@ -1,30 +1,30 @@
 <?php
 /**
  * @file
- * Contains \Drupal\svg_icon\Entity\SvgIcon
+ * Contains \Drupal\svg_sprite\Entity\SvgSprite
  */
 
-namespace Drupal\svg_icon\Entity;
+namespace Drupal\svg_sprite\Entity;
 
 
 use Drupal\Core\Config\Entity\ConfigEntityBase;
 use Drupal\file\Entity\File;
 
 /**
- * Defines the SvgIcon configuration entity.
+ * Defines the SvgSprite configuration entity.
  *
  * @ConfigEntityType(
- *   id = "svg_icon",
+ *   id = "svg_sprite",
  *   label = @Translation("SVG icon"),
  *   handlers = {
- *     "list_builder" = "Drupal\svg_icon\SvgIconListBuilder",
+ *     "list_builder" = "Drupal\svg_sprite\SvgSpriteListBuilder",
  *     "form" = {
- *       "add" = "Drupal\svg_icon\Form\SvgIconForm",
- *       "edit" = "Drupal\svg_icon\Form\SvgIconForm",
- *       "delete" = "Drupal\svg_icon\Form\SvgIconDeleteForm"
+ *       "add" = "Drupal\svg_sprite\Form\SvgSpriteForm",
+ *       "edit" = "Drupal\svg_sprite\Form\SvgSpriteForm",
+ *       "delete" = "Drupal\svg_sprite\Form\SvgSpriteDeleteForm"
  *     }
  *   },
- *   config_prefix = "svg_icon",
+ *   config_prefix = "svg_sprite",
  *   admin_permission = "administer site configuration",
  *   entity_keys = {
  *     "id" = "id",
@@ -32,24 +32,24 @@ use Drupal\file\Entity\File;
  *     "uuid" = "uuid"
  *   },
  *   links = {
- *     "canonical" = "/admin/config/user-interface/svg-icon/{svg_icon}",
+ *     "canonical" = "/admin/config/user-interface/svg-icon/{svg_sprite}",
  *     "add-form" = "/admin/config/user-interface/svg-icon/add",
- *     "edit-form" = "/admin/config/user-interface/svg-icon/{svg_icon}/edit",
- *     "delete-form" = "/admin/config/user-interface/svg-icon/{svg_icon}/delete",
+ *     "edit-form" = "/admin/config/user-interface/svg-icon/{svg_sprite}/edit",
+ *     "delete-form" = "/admin/config/user-interface/svg-icon/{svg_sprite}/delete",
  *     "collection" = "/admin/config/user-interface/svg-icon"
  *   }
  * )
  */
-class SvgIcon extends ConfigEntityBase implements SvgIconInterface {
+class SvgSprite extends ConfigEntityBase implements SvgSpriteInterface {
 
   /**
-   * The machine name of this SvgIcon configuration.
+   * The machine name of this SvgSprite configuration.
    * @var string
    */
   protected $id;
 
   /**
-   * The huma-readable name of this SvgIcon configuration.
+   * The huma-readable name of this SvgSprite configuration.
    * @var string
    */
   protected $label;
@@ -82,10 +82,10 @@ class SvgIcon extends ConfigEntityBase implements SvgIconInterface {
    */
   public static function getConfigList() {
 
-    $entities = SvgIcon::loadMultiple();
+    $entities = SvgSprite::loadMultiple();
     $config_list = array();
 
-    /** @var SvgIconInterface $entity */
+    /** @var SvgSpriteInterface $entity */
     foreach ($entities as $entity) {
       $config_list[$entity->get('id')] = $entity->get('label');
     }

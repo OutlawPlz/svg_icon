@@ -4,4 +4,4 @@ description: 'Add icon to menu link.'
 core: 8.x
 package: 'SVG Icon'
 dependencies:
-  - svg_icon
+  - svg_sprite

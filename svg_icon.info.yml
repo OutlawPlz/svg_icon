@@ -1,5 +1,0 @@
-name: 'SVG Icon'
-type: module
-description: 'Manage your SVG icon set.'
-core: 8.x
-package: 'SVG Icon'

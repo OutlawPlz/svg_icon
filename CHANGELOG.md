@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## v0.1.2
+
+- Renamed field icon_only to hide_label. Refactor svg_icon to svg_sprite.
+README.
+
 ## v0.1.1
 
 - Fixed notice "Undefined index: weight". Move custom Element to svg_icon.
